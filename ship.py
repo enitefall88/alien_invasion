@@ -38,5 +38,5 @@ class Ship:
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect)
 
-
+#todo
 
