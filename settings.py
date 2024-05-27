@@ -1,48 +1,48 @@
-import pygame
+class Settings:
+    """A class to store all settings for Alien Invasion."""
 
-from pygame.sprite import Sprite
+    def __init__(self):
+        """Initialize the game's static settings."""
+        # Screen settings
+        self.screen_width = 1200
+        self.screen_height = 800
+        self.bg_color = (230, 230, 230)
 
+        # Ship settings
+        self.ship_limit = 3
 
-class Ship(Sprite):
-    """A class to manage the ship."""
+        # Bullet settings
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (60, 60, 60)
+        self.bullets_allowed = 3
 
-    def __init__(self, ai_game):
-        """Initialize the ship and set its starting position."""
-        super().__init__()
-        self.screen = ai_game.screen
-        self.settings = ai_game.settings
-        self.screen_rect = ai_game.screen.get_rect()
+        # Alien settings
+        self.fleet_drop_speed = 10
 
-        # Load the ship image and get its rect.
-        self.image = pygame.image.load('images/ship.bmp')
-        self.rect = self.image.get_rect()
+        # How quickly the game speeds up
+        self.speedup_scale = 1.1
+        # How quickly the alien point values increase
+        self.score_scale = 1.5
 
-        # Start each new ship at the bottom center of the screen.
-        self.rect.midbottom = self.screen_rect.midbottom
+        self.initialize_dynamic_settings()
 
-        # Store a decimal value for the ship's horizontal position.
-        self.x = float(self.rect.x)
+    def initialize_dynamic_settings(self):
+        """Initialize settings that change throughout the game."""
+        self.ship_speed = 1.5
+        self.bullet_speed = 3.0
+        self.alien_speed = 1.0
 
-        # Movement flags
-        self.moving_right = False
-        self.moving_left = False
+        # fleet_direction of 1 represents right; -1 represents left.
+        self.fleet_direction = 1
 
-    def update(self):
-        """Update the ship's position based on movement flags."""
-        # Update the ship's x value, not the rect.
-        if self.moving_right and self.rect.right < self.screen_rect.right:
-            self.x += self.settings.ship_speed
-        if self.moving_left and self.rect.left > 0:
-            self.x -= self.settings.ship_speed
+        # Scoring
+        self.alien_points = 50
 
-        # Update rect object from self.x.
-        self.rect.x = self.x
+    def increase_speed(self):
+        """Increase speed settings and alien point values."""
+        self.ship_speed *= self.speedup_scale
+        self.bullet_speed *= self.speedup_scale
+        self.alien_speed *= self.speedup_scale
 
-    def blitme(self):
-        """Draw the ship at its current location."""
-        self.screen.blit(self.image, self.rect)
-
-    def center_ship(self):
-        """Center the ship on the screen."""
-        self.rect.midbottom = self.screen_rect.midbottom
-        self.x = float(self.rect.x)
+        self.alien_points = int(self.alien_points * self.score_scale)
